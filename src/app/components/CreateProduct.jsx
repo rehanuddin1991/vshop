@@ -65,11 +65,9 @@ const CreateProduct = () => {
             <form  className="card-body items-center justify-center gap-4   grid grid-cols-1 lg:grid-cols-2"  onSubmit={handleSubmit}>
             
            
-
-
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-bold">Product Name</span>
+                  <span className="label-text font-bold">Product Name <span className="text-[red] font-bold">*</span> </span>
                 </label>
                 <input type="text" onChange={(e)=>{inputOnChange("ProductName",e.target.value)}} 
                 placeholder="Input Product Name" className="input input-bordered"   />
@@ -78,7 +76,7 @@ const CreateProduct = () => {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-bold">Product Code</span>
+                  <span className="label-text font-bold">Product Code <span className="text-[red] font-bold">*</span></span>
                 </label>
                 <input type="text" onChange={(e)=>{inputOnChange("ProductCode",e.target.value)}} 
                 placeholder="Input Product Code" className="input input-bordered"   />
@@ -89,21 +87,21 @@ const CreateProduct = () => {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-bold" >Image</span>
+                  <span className="label-text font-bold" >Image <span className="text-[red] font-bold">*</span></span>
                 </label>
                 <input type="text" onChange={(e)=>{inputOnChange("Img",e.target.value)}} placeholder="Input Image URL" className="input input-bordered"  />
               </div>
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-bold">Unit Price</span>
+                  <span className="label-text font-bold">Unit Price <span className="text-[red] font-bold">*</span></span>
                 </label>
                 <input type="number" onChange={(e)=>{inputOnChange("UnitPrice",e.target.value)}} placeholder="Input Unit Price" className="input input-bordered"  />
               </div>
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-bold">Quantity</span>
+                  <span className="label-text font-bold">Quantity <span className="text-[red] font-bold">*</span></span>
                 </label>
                 <input type="number" onChange={(e)=>{inputOnChange("Qty",e.target.value)}} placeholder="Input qty" className="input input-bordered"  />
               </div>
@@ -111,7 +109,7 @@ const CreateProduct = () => {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-bold">Total Price</span>
+                  <span className="label-text font-bold">Total Price <span className="text-[red] font-bold">*</span></span>
                 </label>
                 <input type="number" onChange={(e)=>{inputOnChange("TotalPrice",e.target.value)}} placeholder="Input  total price" className="input input-bordered"  />
               </div>
@@ -119,7 +117,7 @@ const CreateProduct = () => {
 
               <div className="form-control mt-6">
               <button className="btn btn-primary" type="submit"  >
-        {loading ? 'Saving...' : 'Submit'}
+        {loading ? 'Saving...' : 'Save'}
         <br />
        
       </button> <span className="label-text">{error && <p style={{ color: 'red' }}>{error}</p>}</span>

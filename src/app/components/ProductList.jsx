@@ -10,6 +10,19 @@ function ProductList() {
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
   const [updatedName, setUpdatedName] = useState('');
+
+  const [editingRow, setEditingRow] = useState(null); // Track the row being edited
+
+  const [formData, setFormData] = useState({
+    ProductName: '',
+    ProductCode: '',
+    Qty: '',
+    Img: '',
+    UnitPrice: '',
+    TotalPrice: '',
+  });
+
+  const [message, setMessage] = useState('');
   const router=useRouter();
   // Fetch product data from the API
    
@@ -25,42 +38,78 @@ function ProductList() {
       }
     }
 
-     
+    const handleSubmitUpdate = async (e) => {
+      e.preventDefault();
+      if (!editingRow) return;
+  
+      try {
+        const response = await fetch(`https://crud.teamrabbil.com/api/v1/UpdateProduct/${editingRow._id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        if (response.ok) {
+          toast.success('Update successful!');
+          // Update the data in the table
+          // const updatedData = products.data.map((product) =>
+          //   product._id === editingRow._id ? { ...product, ...formData } : product
+          // );
+          // setProducts(updatedData);
+          fetchProducts();
+          setEditingRow(null);
+          setFormData({
+            ProductName: '',
+            ProductCode: '',
+            Qty: '',
+            Img: '',
+            UnitPrice: '',
+            TotalPrice: '',
+          }); // Reset form data
+        } else {
+          setMessage('Update failed. Please try again.');
+        }
+      } catch (error) {
+        console.error(error);
+        setMessage('An error occurred. Please try again.');
+      }
+    };
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
 
+    const inputOnChange = (name,value) => {
+      setFormData((data)=>({
+          ...data,
+          [name]:value
+      }))
+  }
+
+    const handleEdit = (row) => {
+      setEditingRow(row);
+      setFormData({
+        ProductName: row.ProductName,
+        ProductCode: row.ProductCode,
+        Qty: row.Qty,
+        UnitPrice: row.UnitPrice,
+        TotalPrice: row.TotalPrice,
+        Img: row.Img,
+      });
+    };
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
-
-   //console.log('first',products);
-  // Handle Update
-  async function handleUpdate(productId) {
-    try {
-      const response = await fetch(`https://api.example.com/products/${productId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: updatedName }),
-      });
-
-      if (response.ok) {
-        const updatedProduct = await response.json();
-        setProducts((prevProducts) =>
-          prevProducts.map((product) =>
-            product.id === productId ? { ...product, name: updatedName } : product
-          )
-        );
-        setEditingProduct(null);
-        setUpdatedName('');
-        alert('Product updated successfully');
-      }
-    } catch (error) {
-      console.error('Error updating product:', error);
-    }
-  }
-
+ 
+   
+ 
   // Handle Delete
   async function handleDelete(productId) {
      
@@ -86,7 +135,7 @@ function ProductList() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className='relative'>
       <div className="overflow-x-auto">
   <table className="table">
     {/* head */}
@@ -103,7 +152,7 @@ function ProductList() {
     </thead>
     <tbody>
     
-      {products["data"].map((product) => 
+      {products.data.map((product) => 
           (
             
 
@@ -125,36 +174,101 @@ function ProductList() {
         <td> {product.ProductCode} </td>
         <td> {product.Qty} </td>
         <td> {product.UnitPrice} </td>
-        <td> {product.TotalPrice} </td>
-         
+        <td> {product.TotalPrice} </td>         
         <td>
-        <Link href={`/product/updateproduct/${product._id}`}>
-                   <MdEdit  size={30} /> &nbsp; 
-        </Link>
+          <button onClick={() => handleEdit(product)}><MdEdit size={39} /></button>
+          <button onClick={() => handleDelete(product._id)}><MdDelete size={39} />  </button>
+        </td>
+      </tr>              
+             
+             
+          ))}
+</tbody>
+</table>
+
+
+
+
+</div>
+
+{editingRow && (
+
+<div className="hero bg-base-200 shadow-2xl absolute z-10  top-0 left-0  ">
+<div className="hero-content  max-w-[50rem] ">
+   
+  <div className="card bg-base-100   max-w-[50rem]   shadow-2xl">
+  <legend className="text-[blue] font-bold m-1 p-1 text-lg text-center">Create Product</legend>
+    <form  className="  top-0 card-body items-center justify-center gap-4   grid grid-cols-1 lg:grid-cols-2" 
+     onSubmit={handleSubmitUpdate}>
+
+
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text font-bold">Product Name <span className="text-[red] font-bold">*</span></span>
+        </label>
+        <input type="text" value={formData.ProductName} onChange={(e)=>{inputOnChange("ProductName",e.target.value)}} 
+        placeholder="Input Product Name" className="input input-bordered"   />
+      </div>
+
+
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text font-bold">Product Code <span className="text-[red] font-bold">*</span></span>
+        </label>
+        <input type="text" value={formData.ProductCode}  onChange={(e)=>{inputOnChange("ProductCode",e.target.value)}} 
+        placeholder="Input Product Code" className="input input-bordered"   />
+      </div>
+
        
 
-        <button onClick={() => handleDelete(product._id)}><MdDelete size={39} />
-        </button>
-        </td>
-      </tr>
+
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text font-bold" >Image <span className="text-[red] font-bold">*</span></span>
+        </label>
+        <input type="text"  value={formData.Img}  onChange={(e)=>{inputOnChange("Img",e.target.value)}} placeholder="Input Image URL" className="input input-bordered"  />
+      </div>
+
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text font-bold">Unit Price <span className="text-[red] font-bold">*</span></span>
+        </label>
+        <input type="number" value={formData.UnitPrice}  onChange={(e)=>{inputOnChange("UnitPrice",e.target.value)}} placeholder="Input Unit Price" className="input input-bordered"  />
+      </div>
+
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text font-bold">Quantity <span className="text-[red] font-bold">*</span> </span>
+        </label>
+        <input type="number" value={formData.Qty}  onChange={(e)=>{inputOnChange("Qty",e.target.value)}} placeholder="Input qty" className="input input-bordered"  />
+      </div>
 
 
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text font-bold">Total Price <span className="text-[red] font-bold">*</span> </span>
+        </label>
+        <input type="number" value={formData.TotalPrice}  onChange={(e)=>{inputOnChange("TotalPrice",e.target.value)}} placeholder="Input  total price" className="input input-bordered"  />
+      </div>
+       
 
+      <div className="form-control mt-6">
+      <button className="btn btn-primary" type="Update"  >
+{loading ? 'Updating...' : 'Update'}
+<br />
 
-               
-             
-             
-          )
-           
+</button> <span className="label-text">{message && <p style={{ color: 'red' }}>{message}</p>}</span>
+
         
+      </div>
+    </form>
+  </div>
+</div>
+</div>
 
-        
 
         
       )}
-</tbody>
-</table>
-</div>
     </div>
   );
 }
