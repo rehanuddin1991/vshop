@@ -1,7 +1,5 @@
 "use client"
 import {useState} from "react";
-//import {ErrorToast, IsEmail, IsEmpty, SuccessToast} from "../utility/FormHelper";
-//import SubmitButton from "@/components/SubmitButton";
 import {useRouter} from "next/navigation";
 import toast from 'react-hot-toast';
 const CreateProduct = () => {
@@ -16,8 +14,7 @@ const CreateProduct = () => {
             [name]:value
         }))
     }
-    
-    
+       
 
     const handleSubmit = async (e) => {
         e.preventDefault();
