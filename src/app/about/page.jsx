@@ -1,10 +1,9 @@
-import ProductList from '@/app/components/ProductList'
 import React from 'react'
-
+import About from '../components/about'
 const page = () => {
   return (
     <div>
-      <ProductList/>
+        <About/>
     </div>
   )
 }

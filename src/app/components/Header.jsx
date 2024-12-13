@@ -7,7 +7,7 @@ const Header = () => {
         <div className="navbar bg-base-100 shadow-lg mt-1 mb-4">
   <div className="navbar-start">
     <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"
@@ -24,29 +24,27 @@ const Header = () => {
       <ul
         tabIndex={0}
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-        <li><a>Item 1</a></li>
-        <li>
-          <a>Parent</a>
-          <ul className="p-2">
-            <li><a>Submenu 1</a></li>
-            <li><a>Submenu 2</a></li>
-          </ul>
-        </li>
-        <li><a>Item 3</a></li>
+       <Link href={"/"}>Operations</Link>
+      <Link href={"/product/ProductList"}>Product List</Link>
+      <Link href={"/product/CreateProduct/"}> Create Product </Link> 
+       
+    
+      <Link href={"/about"}> About </Link> 
+      <Link href={"/"}> Contact </Link> 
       </ul>
     </div>
     <Link href={"/"} className="text-[midnightblue] font-bold shadow-sm text-xl">  VShop</Link> 
   </div>
-  <div className="navbar-center hidden lg:flex">
+  <div className="navbar-center hidden md:flex lg:flex">
     <ul className="menu menu-horizontal px-7 space-x-12 font-bold text-[darkcyan]">
       
       <Link href={"/"}>Operations</Link>
       <Link href={"/product/ProductList"}>Product List</Link>
-      <Link href={"/product/CreateProduct/"}> Create Product </Link> 
-      <Link href={"/product/CreateProduct/"}> Gallery </Link> 
+      <Link href={"/product/CreateProduct"}> Create Product </Link> 
+       
     
-      <Link href={"/product/CreateProduct/"}> About </Link> 
-      <Link href={"/product/CreateProduct/"}> Contact </Link> 
+      <Link href={"/about"}> About </Link> 
+      <Link href={"/"}> Contact </Link> 
       
     </ul>
   </div>
